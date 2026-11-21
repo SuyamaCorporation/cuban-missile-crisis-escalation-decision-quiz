@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>キューバ危機・核エスカレーション歴史判断クイズ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen p-4">
+<div class="max-w-lg mx-auto">
+  <h1 class="text-xl font-bold text-red-400 text-center mb-1">🚀 キューバ危機</h1>
+  <p class="text-gray-400 text-center text-sm mb-1">核エスカレーション歴史判断クイズ</p>
+  <p class="text-gray-600 text-center text-xs mb-4">1962年10月16日〜28日 — 人類が核戦争に最も近づいた13日間</p>
+
+  <div class="bg-gray-800 rounded-xl p-3 mb-4 flex justify-between text-sm">
+    <span class="text-gray-400">ケネディの選択と一致: <span id="match-count" class="text-green-400 font-bold">0</span>/<span id="total-q">10</span></span>
+    <span class="text-gray-400">問題: <span id="q-num">1</span></span>
+  </div>
+
+  <div id="quiz-box" class="bg-gray-800 rounded-2xl p-5"></div>
+
+  <button onclick="startQuiz()" class="w-full mt-4 bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 rounded-xl font-bold">リスタート</button>
+</div>
+
+<script>
+const questions = [
+  {
+    date: '10月16日（火）朝',
+    context: 'U-2偵察機がキューバにソ連の中距離弾道ミサイル（MRBM）建設現場を撮影した。JFKは大統領執務室で初めてこの情報を受け取った。',
+    question: 'ケネディ大統領が最初にとった行動は？',
+    options: [
+      { label: 'ExComm（大統領顧問委員会）を極秘に召集し、選択肢を検討させる', kennedy: true },
+      { label: '即座にソ連大使を呼び、ミサイル撤去を要求する', kennedy: false },
+      { label: '国連安保理に緊急提訴し、公開の場で問題を提起する', kennedy: false },
+      { label: 'NATO同盟国に即座に通知し、共同声明を準備する', kennedy: false },
+    ],
+    outcome: 'ケネディは情報の漏洩を防ぎ、選択肢を冷静に検討するためExCommを秘密裏に設置。予定通り公務も続けた。',
+    excomm: '最初の数日間、ExCommでは空爆・海上封鎖・外交交渉・何もしないの4案が激論された。',
+  },
+  {
+    date: '10月18日（木）',
+    context: 'ソ連のグロムイコ外相がホワイトハウスを訪問。ケネディはすでにミサイルの存在を知っていたが、グロムイコはそれを明かさなかった。',
+    question: 'ケネディはグロムイコとの会談でとった戦術は？',
+    options: [
+      { label: 'ミサイルについて直接言及せず、探りを入れながら会談を継続', kennedy: true },
+      { label: '事実を突きつけ、今すぐ撤去しなければ軍事行動をとると警告', kennedy: false },
+      { label: '会談を打ち切り、ソ連への制裁発動を通告した', kennedy: false },
+    ],
+    outcome: 'ケネディは情報アドバンテージを維持。グロムイコに対してキューバへの防衛的兵器提供は許容できないと伝えたが、ミサイルには言及しなかった。',
+    excomm: 'この情報アドバンテージがその後の交渉で重要な役割を果たした。',
+  },
+  {
+    date: '10月20日（土）',
+    context: 'ExCommで激論の末、空爆か海上封鎖かの選択に絞り込まれた。軍部は空爆（外科的攻撃）を強く推奨していた。',
+    question: 'ケネディが海上封鎖を選んだ主な理由は？',
+    options: [
+      { label: '段階的エスカレーションの余地を残しつつ、ソ連に交渉の時間を与えるため', kennedy: true },
+      { label: '空爆ではミサイルサイト全体を破壊できないと軍部が報告したため', kennedy: false },
+      { label: 'NATO同盟国の一部が空爆に反対したため', kennedy: false },
+    ],
+    outcome: '空爆は一部サイトを見逃す可能性・ソビエト要員の死亡・ソ連の即時報復リスクがあった。封鎖は時間を稼ぎつつ交渉の余地を残せた。',
+    excomm: '封鎖を「隔離（quarantine）」と呼んだのは、封鎖（blockade）が国際法上の戦争行為とみなされる可能性があったため。',
+  },
+  {
+    date: '10月22日（月）夜',
+    context: 'ケネディは全米テレビ演説でキューバのミサイル存在を公表し、海上封鎖を宣言した。世界が核戦争の恐怖に震えた。',
+    question: '演説でケネディが核使用について取った立場は？',
+    options: [
+      { label: 'キューバからの核攻撃をソ連の攻撃とみなし、全面報復を警告', kennedy: true },
+      { label: '核使用は絶対に行わないと平和的解決への意志を明確にした', kennedy: false },
+      { label: '先制核攻撃も選択肢のひとつであることを示唆した', kennedy: false },
+    ],
+    outcome: 'この「核の傘」宣言がソ連に「代理戦争は即核戦争に直結する」と理解させた。恫喝と対話の双方を維持する巧みな戦略。',
+    excomm: 'ソ連書記フルシチョフはこの演説を聞いてケネディの本気度を確信し、外交的解決の模索を始めたとされる。',
+  },
+  {
+    date: '10月24日（水）朝',
+    context: '海上封鎖ライン（500海里）にソ連船20隻以上が接近中。核弾頭を搭載している可能性があった。艦隊は臨戦態勢。',
+    question: 'ソ連船が封鎖ラインに接近した時、ケネディがとった行動は？',
+    options: [
+      { label: '封鎖ラインを少し後退させ、ソ連に時間的猶予を与えた', kennedy: true },
+      { label: '即座に先頭の船を停止・臨検した', kennedy: false },
+      { label: '封鎖を解除してソ連に妥協のシグナルを送った', kennedy: false },
+    ],
+    outcome: '封鎖ラインを800kmから500kmに縮小。ソ連の数隻の船は進路を転換。ロバート・ケネディが「息をのむ瞬間だった」と述懐。',
+    excomm: '後に解放されたソ連文書によると、一部の船には核弾頭が積まれていた。事態は想像以上に危険だった。',
+  },
+  {
+    date: '10月27日（土）午前 — 「暗黒の土曜日」',
+    context: 'U-2偵察機がキューバ上空で撃墜された。軍部は即座の空爆を強く迫った。同日、ソ連の潜水艦B-59で核魚雷発射の手続きが開始されていた（後に判明）。',
+    question: 'U-2撃墜に対するケネディの判断は？',
+    options: [
+      { label: '空爆を保留し、フルシチョフへの直接書簡を優先させた', kennedy: true },
+      { label: '即座にキューバのSAMサイトへの報復空爆を命じた', kennedy: false },
+      { label: 'UNを通じた緊急停戦調停を要請した', kennedy: false },
+    ],
+    outcome: '後に判明したことだが、この日、ソ連潜水艦B-59で副艦長ヴァシリ・アルヒポフが核魚雷発射への賛同を拒否した。3人の合意が必要な手続きで、彼だけが反対し人類は核戦争を回避した。',
+    excomm: '「暗黒の土曜日」は最も核戦争に近かった日。ケネディの自制がフルシチョフへの交渉空間を守った。',
+  },
+  {
+    date: '10月27日（土）夜',
+    context: 'フルシチョフから2通の手紙が届いた。最初の手紙は穏健的（キューバ不侵攻を保証すればミサイルを撤去）、2通目は強硬的（トルコのNATOミサイル撤去も要求）。',
+    question: 'ケネディのExCommが採用した「ロバート・ケネディ案」とは？',
+    options: [
+      { label: '最初の穏健な手紙にのみ返答し、2通目は無視する', kennedy: true },
+      { label: '2通目のトルコのミサイル交換条件を受け入れる', kennedy: false },
+      { label: '両手紙を無視し、国連を通じた第三者調停を要求する', kennedy: false },
+    ],
+    outcome: 'この「選択的無視作戦」が功を奏した。表向きはキューバ不侵攻のみを条件にしながら、秘密裏にトルコのミサイル撤去をソ連に約束した（後に実行）。',
+    excomm: '公式には「最初の穏健手紙への返答」として歴史に記録されたが、実際はトルコのミサイルが秘密交換条件だった。',
+  },
+  {
+    date: '10月28日（日）朝',
+    context: 'フルシチョフがモスクワ・ラジオでキューバのミサイル撤去を公式発表した。危機は実質的に終結した。',
+    question: 'フルシチョフがラジオで発表した主な理由は？',
+    options: [
+      { label: '公開発表することでケネディが約束を守らざるをえない状況を作るため', kennedy: true },
+      { label: 'ソ連国内の強硬派への言い訳として国際社会への責任転嫁', kennedy: false },
+      { label: 'ケネディへの信頼のシグナルとして最初から外交的に動いていたため', kennedy: false },
+    ],
+    outcome: '公開発表によってケネディは応じざるをえなくなり、危機が正式に終結。フルシチョフは「後退した」との国内批判を受けたが、核戦争を回避した判断は歴史的に評価される。',
+    excomm: 'この危機後、ホワイトハウスとクレムリンを繋ぐ「ホットライン」が設置された（1963年）。',
+  },
+  {
+    date: '危機後 — 歴史的評価',
+    context: 'キューバ危機はほぼ全ての決定的瞬間で核戦争との紙一重だった。後の研究で複数の「知られざる危機」が明らかになった。',
+    question: 'ヴァシリ・アルヒポフが歴史に残した行動とは？',
+    options: [
+      { label: 'ソ連潜水艦B-59で核魚雷発射への賛同を拒否し、発射を阻止した', kennedy: true },
+      { label: 'ソ連艦隊に「封鎖ラインを越えるな」と独断で無線指示を出した', kennedy: false },
+      { label: 'ケネディに直接秘密連絡して、危機打開の条件を提案した', kennedy: false },
+    ],
+    outcome: 'アルヒポフは「世界を救った男」として後世に語られる。彼の判断がなければ核魚雷が発射され、全面核戦争になっていた可能性が高いと歴史家は言う。',
+    excomm: '彼は生前ほとんど語らず、2000年代に解放されたソ連文書で初めて詳細が判明した。',
+  },
+  {
+    date: '危機の教訓',
+    context: 'キューバ危機はコミュニケーション不全・情報の不確実性・機械的エスカレーションの危険性を露わにした。',
+    question: '危機後に直接設置されたホットラインの目的は？',
+    options: [
+      { label: '誤解・誤算による核戦争を防ぐための米ソ首脳直通通信の確立', kennedy: true },
+      { label: 'NATO同盟国との即時意思疎通のためのシステム構築', kennedy: false },
+      { label: 'ソ連の核ミサイル位置をリアルタイムで把握するための偵察情報共有', kennedy: false },
+    ],
+    outcome: '1963年設置のモスクワ・ワシントン間ホットラインは、後の数々の危機で機能した。危機から生まれた最重要の核管理インフラのひとつ。',
+    excomm: '危機中、外交電報の往復に何時間もかかることが判断を遅らせた。ホットラインはこの教訓から生まれた。',
+  },
+];
+
+let currentQ = 0;
+let matchCount = 0;
+let answered = false;
+
+function startQuiz() {
+  currentQ = 0; matchCount = 0; answered = false;
+  document.getElementById('total-q').textContent = questions.length;
+  updateStats();
+  showQuestion();
+}
+
+function updateStats() {
+  document.getElementById('match-count').textContent = matchCount;
+  document.getElementById('q-num').textContent = Math.min(currentQ + 1, questions.length);
+}
+
+function showQuestion() {
+  if (currentQ >= questions.length) { showComplete(); return; }
+  answered = false;
+  const q = questions[currentQ];
+  const box = document.getElementById('quiz-box');
+  box.innerHTML = ''; // xss-ok: static template, no user input
+
+  const dateDiv = document.createElement('div');
+  dateDiv.className = 'text-red-400 font-bold text-sm mb-2';
+  dateDiv.textContent = '📅 ' + q.date;
+  box.appendChild(dateDiv);
+
+  const ctxDiv = document.createElement('div');
+  ctxDiv.className = 'text-gray-300 text-xs bg-gray-700 rounded-lg p-3 mb-3 leading-relaxed';
+  ctxDiv.textContent = q.context;
+  box.appendChild(ctxDiv);
+
+  const qDiv = document.createElement('div');
+  qDiv.className = 'text-gray-100 font-semibold mb-3';
+  qDiv.textContent = q.question;
+  box.appendChild(qDiv);
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'w-full text-left bg-gray-700 hover:bg-gray-600 text-gray-200 p-3 rounded-xl mb-2 text-sm transition leading-relaxed';
+    btn.textContent = ['A','B','C','D'][i] + '. ' + opt.label;
+    btn.addEventListener('click', () => {
+      if (answered) return;
+      answered = true;
+      const isKennedy = opt.kennedy;
+      if (isKennedy) matchCount++;
+      btn.className = `w-full text-left p-3 rounded-xl mb-2 text-sm leading-relaxed ${isKennedy ? 'bg-green-800 text-green-200' : 'bg-red-800 text-red-200'}`;
+      if (!isKennedy) {
+        box.querySelectorAll('button').forEach(b => {
+          if (b.textContent.slice(3) === q.options.find(o => o.kennedy).label) {
+            b.className = 'w-full text-left bg-green-800 text-green-200 p-3 rounded-xl mb-2 text-sm leading-relaxed';
+          }
+        });
+      }
+      // Show outcome
+      const outBox = document.createElement('div');
+      outBox.className = 'bg-gray-700 rounded-xl p-3 mt-2 space-y-2';
+      const outDiv = document.createElement('div');
+      outDiv.className = 'text-gray-200 text-xs leading-relaxed';
+      outDiv.textContent = '📖 ' + q.outcome;
+      const excDiv = document.createElement('div');
+      excDiv.className = 'text-yellow-400 text-xs leading-relaxed';
+      excDiv.textContent = '💡 ' + q.excomm;
+      outBox.appendChild(outDiv);
+      outBox.appendChild(excDiv);
+      box.appendChild(outBox);
+      currentQ++;
+      updateStats();
+      setTimeout(showQuestion, 3000);
+    });
+    box.appendChild(btn);
+  });
+}
+
+function showComplete() {
+  const box = document.getElementById('quiz-box');
+  box.innerHTML = ''; // xss-ok: static template, no user input
+  const title = document.createElement('div');
+  title.className = 'text-2xl font-bold text-red-300 text-center mb-3';
+  title.textContent = '危機終結 — 核戦争は回避された';
+  const result = document.createElement('div');
+  result.className = 'text-gray-300 text-center text-lg mb-3';
+  result.textContent = `ケネディの判断と一致: ${matchCount}/${questions.length}問`;
+  const eval_text = matchCount >= 8 ? '優秀な大統領顧問候補です' : matchCount >= 5 ? '歴史の判断を半分理解している' : '強硬派の罠にかかりやすい傾向があります';
+  const evalDiv = document.createElement('div');
+  evalDiv.className = 'text-yellow-400 text-sm text-center';
+  evalDiv.textContent = '評価: ' + eval_text;
+  box.appendChild(title);
+  box.appendChild(result);
+  box.appendChild(evalDiv);
+}
+
+startQuiz();
+</script>
+</body>
+</html>
